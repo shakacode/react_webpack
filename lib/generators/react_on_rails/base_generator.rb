@@ -33,7 +33,7 @@ module ReactOnRails
                         app/views/layouts/hello_world.html.erb
                         config/initializers/react_on_rails.rb
                         Procfile.dev
-                        Procfile.dev-hmr]
+                        Procfile.dev-static]
         base_files.each { |file| copy_file("#{base_path}#{file}", file) }
       end
 
@@ -93,6 +93,9 @@ module ReactOnRails
 
         puts "Adding Webpack dependencies"
         run "yarn add webpack-merge"
+
+        puts "Adding default javascript Rails dependencies"
+        run " yarn add @rails/ujs turbolinks @rails/activestorage"
 
         puts "Adding dev dependencies"
         run "yarn add -D @pmmmwh/react-refresh-webpack-plugin fork-ts-checker-webpack-plugin react-refresh"
