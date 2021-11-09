@@ -91,6 +91,9 @@ module ReactOnRails
         puts "Adding CSS handlers"
         run "yarn add css-loader css-minimizer-webpack-plugin mini-css-extract-plugin style-loader"
 
+        puts "Adding Webpack dependencies"
+        run "yarn add webpack-merge"
+
         puts "Adding dev dependencies"
         run "yarn add -D @pmmmwh/react-refresh-webpack-plugin fork-ts-checker-webpack-plugin react-refresh"
       end
