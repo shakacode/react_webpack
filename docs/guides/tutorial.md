@@ -105,12 +105,12 @@ Then run server with a static client bundle. Static means that the bundle is sav
 public/webpack/packs directory.
 
 ```
-foreman start -f Procfile.dev
+foreman start -f Procfile.dev-static
 ```
 
 ## To run with the webpack-dev-server:
 ```
-foreman start -f Procfile.dev-hmr
+foreman start -f Procfile.dev
 ```
 
 Visit [http://localhost:3000/hello_world](http://localhost:3000/hello_world) and see your **React On Rails** app running!
@@ -312,7 +312,7 @@ mv app/javascript client
 
 ## Using HMR with the rails/webpacker setup
 
-Start the app using `foreman start -f Procfile.dev-hmr`.
+Start the app using `foreman start -f Procfile.dev`.
 
 When you change a JSX file and save, the browser will automatically refresh!
 
