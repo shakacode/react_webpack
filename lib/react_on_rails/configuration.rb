@@ -51,7 +51,7 @@ module ReactOnRails
                   :build_production_command,
                   :i18n_dir, :i18n_yml_dir, :i18n_output_format,
                   :server_render_method, :random_dom_id,
-                  :same_bundle_for_client_and_server
+                  :same_bundle_for_client_and_server, :client_props_extension
 
     # rubocop:disable Metrics/AbcSize
     def initialize(node_modules_location: nil, server_bundle_js_file: nil, prerender: nil,
@@ -65,7 +65,7 @@ module ReactOnRails
                    build_production_command: nil,
                    same_bundle_for_client_and_server: nil,
                    i18n_dir: nil, i18n_yml_dir: nil, i18n_output_format: nil,
-                   random_dom_id: nil, server_render_method: nil)
+                   random_dom_id: nil, server_render_method: nil, client_props_extension: nil)
       self.node_modules_location = node_modules_location.present? ? node_modules_location : Rails.root
       self.generated_assets_dirs = generated_assets_dirs
       self.generated_assets_dir = generated_assets_dir
@@ -87,6 +87,7 @@ module ReactOnRails
       self.trace = trace.nil? ? Rails.env.development? : trace
       self.raise_on_prerender_error = raise_on_prerender_error
       self.skip_display_none = skip_display_none
+      self.client_props_extension = client_props_extension
 
       # Server rendering:
       self.server_bundle_js_file = server_bundle_js_file
