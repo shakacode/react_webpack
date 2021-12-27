@@ -129,6 +129,11 @@ ReactOnRails.configure do |config|
   # any server rendering issues immediately during development.
   config.raise_on_prerender_error = Rails.env.development?
 
+  # To handle client side props differently, Add a hash with a module name as a string for the `extensor_name` key
+  # and the method name as a string for the key `method`.
+  # This will be used when prerendering is set to false. A module example can be found below.
+  config.client_props_extension = { extensor_name: "PropsExtension", method: "client_props" }
+
   ################################################################################
   # Server Renderer Configuration for ExecJS
   ################################################################################
@@ -213,6 +218,18 @@ ReactOnRails.configure do |config|
   config.webpack_generated_files = %w( server-bundle.js manifest.json )
   # Note, be sure NOT to include your server-bundle.js if it is hashed, or else React on Rails will
   # think the server-bundle.js is missing every time for test runs.
+end
+```
+
+Example of a ReactOnRailsConfig module for `client_props_extension`:
+
+```ruby
+module PropsExtension
+  def self.client_props(component_name, props)
+    return props.except(:server_side_only) if component_name == 'HelloWorld'
+
+    props
+  end
 end
 ```
 
