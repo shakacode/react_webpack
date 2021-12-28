@@ -18,9 +18,7 @@ end
 module ClientPropsExtension
   # Return a Hash that contains custom props for all client rendered react_components
   def self.modify_props(component_name, props)
-    if component_name == 'HelloWorldProps'
-      props[:modificationTarget] = "client-only"
-    end
+    props[:modificationTarget] = "client-only" if component_name == "HelloWorldProps"
     props
   end
 end

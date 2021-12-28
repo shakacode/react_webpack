@@ -27,7 +27,7 @@ class PagesController < ApplicationController
       helloWorldData: {
         name: "Mr. Server Side Rendering"
       }.merge(xss_payload),
-      modificationTarget: "server-only",
+      modificationTarget: "server-only"
     }
 
     @app_props_hello = {
