@@ -28,22 +28,8 @@ module ReactOnRails
       end
 
       def client_props
-        extension_module_hash_config = retrieve_configuration_value_for(:client_props_extension)
-
-        return nil unless options[:props] && extension_module_hash_config
-
-        # Get the Module and method from the config hash
-        extension_module = extension_module_hash_config[:extensor_name].constantize
-        extension_module_method = extension_module_hash_config[:method].to_sym
-
-        # return the processed props
-        extension_module.send(extension_module_method, react_component_name, options[:props])
-      rescue NoMethodError
-        raise "The method #{extension_module_method} does not exist in the module #{extension_module}.\n
-        Make sure it is defined as self.my_method"
-      rescue NameError
-        raise "The module #{extension_module_hash_config[:extensor_name]} provided at react_on_rails.rb
-        config does not exist"
+        props_extension = ReactOnRails.configuration.client_props_extension
+        props_extension ? props_extension.modify_props(react_component_name, props.clone) : props
       end
 
       def random_dom_id
