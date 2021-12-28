@@ -15,6 +15,16 @@ module RenderingExtension
   end
 end
 
+module ClientPropsExtension
+  # Return a Hash that contains custom props for all client rendered react_components
+  def self.modify_props(component_name, props)
+    if component_name == 'HelloWorldProps'
+      props[:modificationTarget] = "client-only"
+    end
+    props
+  end
+end
+
 ReactOnRails.configure do |config|
   config.server_bundle_js_file = "server-bundle.js"
   config.random_dom_id = false # default is true
@@ -23,4 +33,6 @@ ReactOnRails.configure do |config|
   # config.build_production_command = "RAILS_ENV=production NODE_ENV=production bin/webpack"
   # config.webpack_generated_files = %w[server-bundle.js manifest.json]
   config.rendering_extension = RenderingExtension
+
+  config.client_props_extension = ClientPropsExtension
 end
