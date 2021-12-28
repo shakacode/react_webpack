@@ -410,12 +410,10 @@ module ReactOnRails
       render_options = ReactOnRails::ReactComponent::RenderOptions.new(react_component_name: react_component_name,
                                                                        options: options)
 
-      component_props = handle_component_props(render_options)
-
       # Setup the page_loaded_js, which is the same regardless of prerendering or not!
       # The reason is that React is smart about not doing extra work if the server rendering did its job.
       component_specification_tag = content_tag(:script,
-                                                json_safe_and_pretty(component_props).html_safe,
+                                                json_safe_and_pretty(render_options.client_props).html_safe,
                                                 type: "application/json",
                                                 class: "js-react-on-rails-component",
                                                 "data-component-name" => render_options.react_component_name,
@@ -430,12 +428,6 @@ module ReactOnRails
         tag: component_specification_tag,
         result: result
       }
-    end
-
-    def handle_component_props(render_options)
-      client_props = render_options.client_props
-
-      client_props && !render_options.prerender ? client_props : render_options.props
     end
 
     def render_redux_store_data(redux_store_data)
