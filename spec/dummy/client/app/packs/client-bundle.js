@@ -6,6 +6,7 @@ import 'jquery-ujs';
 import ReactOnRails from 'react-on-rails';
 
 import HelloWorld from '../components/HelloWorld';
+import HelloWorldProps from '../components/HelloWorldProps';
 import HelloWorldHooks from '../components/HelloWorldHooks';
 import HelloWorldHooksContext from '../components/HelloWorldHooksContext';
 import ContextFunctionReturnInvalidJSX from '../components/ContextFunctionReturnInvalidJSX';
@@ -61,6 +62,7 @@ ReactOnRails.register({
   HelloWorldHooksContext,
   ContextFunctionReturnInvalidJSX,
   PureComponentWrappedInFunction,
+  HelloWorldProps,
 });
 
 ReactOnRails.registerStore({
