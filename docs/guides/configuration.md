@@ -129,10 +129,10 @@ ReactOnRails.configure do |config|
   # any server rendering issues immediately during development.
   config.raise_on_prerender_error = Rails.env.development?
 
-  # To handle client-side & server-side props differently,
-  # Add a module with a modify_props method that expects the component's name & props hash
-  # See below for an example definition of ClientPropsExtension
-  config.client_props_extension = ClientPropsExtension
+  # This configuration allows logic to be applied to client rendered props, such as stripping props that are only used during server rendering.
+  # Add a module with an adjust_props_for_client_side_hydration method that expects the component's name & props hash
+  # See below for an example definition of RenderingPropsExtension
+  config.rendering_props_extension = RenderingPropsExtension
 
   ################################################################################
   # Server Renderer Configuration for ExecJS
@@ -223,9 +223,9 @@ end
 Example of a ReactOnRailsConfig module for `client_props_extension`:
 
 ```ruby
-module ClientPropsExtension
+module RenderingPropsExtension
   # The modify_props method will be called by ReactOnRails::ReactComponent::RenderOptions if config.client_props_extension is defined
-  def self.modify_props(component_name, props)
+  def self.adjust_props_for_client_side_hydration(component_name, props)
     component_name == 'HelloWorld' ? props.except(:server_side_only) : props
   end
 end

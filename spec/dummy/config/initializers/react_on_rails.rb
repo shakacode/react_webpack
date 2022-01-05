@@ -15,9 +15,9 @@ module RenderingExtension
   end
 end
 
-module ClientPropsExtension
+module RenderingPropsExtension
   # Return a Hash that contains custom props for all client rendered react_components
-  def self.modify_props(component_name, props)
+  def self.adjust_props_for_client_side_hydration(component_name, props)
     props[:modificationTarget] = "client-only" if component_name == "HelloWorldProps"
     props
   end
@@ -32,5 +32,5 @@ ReactOnRails.configure do |config|
   # config.webpack_generated_files = %w[server-bundle.js manifest.json]
   config.rendering_extension = RenderingExtension
 
-  config.client_props_extension = ClientPropsExtension
+  config.rendering_props_extension = RenderingPropsExtension
 end
