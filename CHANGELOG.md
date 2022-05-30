@@ -24,6 +24,7 @@ Changes since last non-beta release.
 
   To migrate this change, remove `mini_racer` gem from your `Gemfile` and test your app for correct behaviour. You can continue using `mini_racer` and it will be still picked as the default `ExecJS` runtime, if present in your app `Gemfile`.
 
+- Added a rake task for automatic generation of react_component packs
 
 ### [13.0.2] - 2022-03-09
 #### Fixed
