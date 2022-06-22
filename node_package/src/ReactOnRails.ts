@@ -18,8 +18,7 @@ import type {
   AuthenticityHeaders,
   StoreGenerator
 } from './types/index';
-import reactHydrate from './reactHydrate';
-import reactRender from './reactRender';
+import reactHydrateOrRender from './reactHydrateOrRender';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Store = any;
@@ -188,9 +187,7 @@ ctx.ReactOnRails = {
     const componentObj = ComponentRegistry.get(name);
     const reactElement = createReactOutput({ componentObj, props, domNodeId });
 
-    const render = hydrate ? reactHydrate : reactRender;
-    // eslint-disable-next-line react/no-render-return-value
-    return render(document.getElementById(domNodeId) as Element, reactElement as ReactElement);
+    return reactHydrateOrRender(hydrate, document.getElementById(domNodeId) as Element, reactElement as ReactElement);
   },
 
   /**
