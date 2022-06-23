@@ -1,4 +1,4 @@
-import type { ReactElement, Component } from 'react';
+import type { ReactElement } from 'react';
 
 import * as ClientStartup from './clientStartup';
 import handleError from './handleError';
@@ -13,11 +13,12 @@ import type {
   RegisteredComponent,
   RenderParams,
   RenderResult,
+  RenderReturnType,
   ErrorOptions,
   ReactComponentOrRenderFunction,
   AuthenticityHeaders,
-  StoreGenerator
-} from './types/index';
+  StoreGenerator,
+} from './types';
 import reactHydrateOrRender from './reactHydrateOrRender';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -183,7 +184,7 @@ ctx.ReactOnRails = {
    * @param hydrate Pass truthy to update server rendered html. Default is falsy
    * @returns {virtualDomElement} Reference to your component's backing instance
    */
-  render(name: string, props: Record<string, string>, domNodeId: string, hydrate: boolean): void | Element | Component {
+  render(name: string, props: Record<string, string>, domNodeId: string, hydrate: boolean): RenderReturnType {
     const componentObj = ComponentRegistry.get(name);
     const reactElement = createReactOutput({ componentObj, props, domNodeId });
 

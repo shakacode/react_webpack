@@ -1,8 +1,8 @@
-import { ReactElement, Component } from 'react';
+import type { ReactElement } from 'react';
 import ReactDOM from 'react-dom';
+import type { RenderReturnType } from './types';
 
-type HydrateOrRenderReturnType = void | Element | Component;
-type HydrateOrRenderType = (domNode: Element, reactElement: ReactElement) => HydrateOrRenderReturnType;
+type HydrateOrRenderType = (domNode: Element, reactElement: ReactElement) => RenderReturnType;
 const supportsReactCreateRoot = parseInt(ReactDOM.version.split('.')[0], 10) >= 18;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -26,7 +26,7 @@ export const reactHydrate: HydrateOrRenderType = supportsReactCreateRoot ?
   reactDomClient.hydrateRoot :
   (domNode, reactElement) => ReactDOM.hydrate(reactElement, domNode);
 
-export function reactRender(domNode: Element, reactElement: ReactElement): HydrateOrRenderReturnType {
+export function reactRender(domNode: Element, reactElement: ReactElement): RenderReturnType {
   if (supportsReactCreateRoot) {
     const root = reactDomClient.createRoot(domNode);
     root.render(reactElement);
@@ -37,6 +37,6 @@ export function reactRender(domNode: Element, reactElement: ReactElement): Hydra
   return ReactDOM.render(reactElement, domNode);
 }
 
-export default function reactHydrateOrRender(shouldHydrate: boolean, domNode: Element, reactElement: ReactElement): HydrateOrRenderReturnType {
+export default function reactHydrateOrRender(shouldHydrate: boolean, domNode: Element, reactElement: ReactElement): RenderReturnType {
   return shouldHydrate ? reactHydrate(domNode, reactElement) : reactRender(domNode, reactElement);
 }
