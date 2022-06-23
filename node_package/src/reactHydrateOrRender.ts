@@ -5,6 +5,8 @@ import type { RenderReturnType } from './types';
 type HydrateOrRenderType = (domNode: Element, reactElement: ReactElement) => RenderReturnType;
 const supportsReactCreateRoot = parseInt(ReactDOM.version.split('.')[0], 10) >= 18;
 
+// TODO: once React dependency is updated to >= 18, we can remove this and just
+// import ReactDOM from 'react-dom/client';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let reactDomClient: any;
 if (supportsReactCreateRoot) {
