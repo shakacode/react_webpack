@@ -37,6 +37,6 @@ export function reactRender(domNode: Element, reactElement: ReactElement): Rende
   return ReactDOM.render(reactElement, domNode);
 }
 
-export default function reactHydrateOrRender(shouldHydrate: boolean, domNode: Element, reactElement: ReactElement): RenderReturnType {
-  return shouldHydrate ? reactHydrate(domNode, reactElement) : reactRender(domNode, reactElement);
+export default function reactHydrateOrRender(domNode: Element, reactElement: ReactElement, hydrate: boolean): RenderReturnType {
+  return hydrate ? reactHydrate(domNode, reactElement) : reactRender(domNode, reactElement);
 }

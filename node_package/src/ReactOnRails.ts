@@ -188,7 +188,7 @@ ctx.ReactOnRails = {
     const componentObj = ComponentRegistry.get(name);
     const reactElement = createReactOutput({ componentObj, props, domNodeId });
 
-    return reactHydrateOrRender(hydrate, document.getElementById(domNodeId) as Element, reactElement as ReactElement);
+    return reactHydrateOrRender(document.getElementById(domNodeId) as Element, reactElement as ReactElement, hydrate);
   },
 
   /**

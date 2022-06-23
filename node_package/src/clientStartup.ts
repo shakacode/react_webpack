@@ -168,7 +168,7 @@ function render(el: Element, railsContext: RailsContext): void {
 You returned a server side type of react-router error: ${JSON.stringify(reactElementOrRouterResult)}
 You should return a React.Component always for the client side entry point.`);
       } else {
-        reactHydrateOrRender(shouldHydrate, domNode, reactElementOrRouterResult as ReactElement);
+        reactHydrateOrRender(domNode, reactElementOrRouterResult as ReactElement, shouldHydrate);
       }
     }
   } catch (e: any) {
