@@ -5,10 +5,12 @@ semi: true
 singleQuote: true
 trailingComma: all
 bracketSpacing: true
-jsxBracketSameLine: false
-parser: flow
+bracketSameLine: false
 
 overrides:
+- files: "*.@(js|jsx)"
+  options:
+    parser: flow
 - files: "*.@(css|scss)"
   options:
     parser: css
