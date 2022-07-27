@@ -189,8 +189,8 @@ module ReactOnRails
 
     def self.raise_client_component_overrides_common(component_name)
       msg = <<~MSG
-        **ERROR** ReactOnRails: client specific definition for Component '#{component_name}' overrides the
-        common definition. Please delete the common definition and have separate server and client files. For more
+        **ERROR** ReactOnRails: client specific definition for Component '#{component_name}' overrides the \
+        common definition. Please delete the common definition and have separate server and client files. For more \
         information, please see https://www.shakacode.com/react-on-rails/docs/guides/file-system-based-automated-bundle-generation.md
       MSG
 
@@ -199,8 +199,8 @@ module ReactOnRails
 
     def self.raise_server_component_overrides_common(component_name)
       msg = <<~MSG
-        **ERROR** ReactOnRails: server specific definition for Component '#{component_name}' overrides the
-        common definition. Please delete the common definition and have separate server and client files. For more
+        **ERROR** ReactOnRails: server specific definition for Component '#{component_name}' overrides the \
+        common definition. Please delete the common definition and have separate server and client files. For more \
         information, please see https://www.shakacode.com/react-on-rails/docs/guides/file-system-based-automated-bundle-generation.md
       MSG
 
@@ -209,7 +209,7 @@ module ReactOnRails
 
     def self.raise_missing_client_component(component_name)
       msg = <<~MSG
-        **ERROR** ReactOnRails: Component '#{component_name}' is missing a client specific file. For more
+        **ERROR** ReactOnRails: Component '#{component_name}' is missing a client specific file. For more \
         information, please see https://www.shakacode.com/react-on-rails/docs/guides/file-system-based-automated-bundle-generation.md
       MSG
 
@@ -218,7 +218,7 @@ module ReactOnRails
 
     def self.raise_shakapacker_version_incompatible
       msg = <<~MSG
-        **ERROR** ReactOnRails: Please upgrade Shakapacker to version v6.5.0 or above to use the automated bundle
+        **ERROR** ReactOnRails: Please upgrade Shakapacker to version v6.5.0 or above to use the automated bundle \
         generation feature. The currently installed version is #{ReactOnRails::WebpackerUtils.shakapacker_version}.
       MSG
 
@@ -227,7 +227,7 @@ module ReactOnRails
 
     def self.raise_webpacker_not_installed
       msg = <<~MSG
-        **ERROR** ReactOnRails: Missing Shakapacker gem. Please upgrade to use Shakapacker v6.5.0 or above to use the
+        **ERROR** ReactOnRails: Missing Shakapacker gem. Please upgrade to use Shakapacker v6.5.0 or above to use the \
         automated bundle generation feature.
       MSG
 
@@ -243,8 +243,8 @@ module ReactOnRails
 
     def self.raise_nested_enteries_disabled
       msg = <<~MSG
-        **ERROR** ReactOnRails: `nested_entries` is configured to be disabled in shakapacker. Please update#{' '}
-        webpacker.yml to enable nested enteries. for more information read#{' '}
+        **ERROR** ReactOnRails: `nested_entries` is configured to be disabled in shakapacker. Please update \
+        webpacker.yml to enable nested enteries. for more information read
         https://www.shakacode.com/react-on-rails/docs/guides/file-system-based-automated-bundle-generation.md#enable-nested_entries-for-shakapacker
       MSG
 
