@@ -48,15 +48,15 @@ module ReactOnRails
     private
 
     def generate_packs
-      common_component_to_path.each_value { |component_path| create_pack component_path }
-      client_component_to_path.each_value { |component_path| create_pack component_path }
+      common_component_to_path.each_value { |component_path| create_pack(component_path) }
+      client_component_to_path.each_value { |component_path| create_pack(component_path) }
 
       create_server_pack if ReactOnRails.configuration.server_bundle_js_file.present?
     end
 
     def create_pack(file_path)
-      output_path = generated_pack_path file_path
-      content = pack_file_contents file_path
+      output_path = generated_pack_path(file_path)
+      content = pack_file_contents(file_path)
 
       File.write(output_path, content)
 
@@ -64,10 +64,10 @@ module ReactOnRails
     end
 
     def pack_file_contents(file_path)
-      registered_component_name = component_name file_path
+      registered_component_name = component_name(file_path)
       <<~FILE_CONTENT
         import ReactOnRails from 'react-on-rails';
-        import #{registered_component_name} from '#{relative_component_path_from_generated_pack file_path}';
+        import #{registered_component_name} from '#{relative_component_path_from_generated_pack(file_path)}';
 
         ReactOnRails.register({#{registered_component_name}});
       FILE_CONTENT
@@ -81,8 +81,8 @@ module ReactOnRails
     end
 
     def generated_server_pack_file_content
-      common_components_for_server_bundle = common_component_to_path.delete_if { |k| server_component_to_path.key? k }
-      component_for_server_registration_to_path = common_components_for_server_bundle.merge server_component_to_path
+      common_components_for_server_bundle = common_component_to_path.delete_if { |k| server_component_to_path.key?(k) }
+      component_for_server_registration_to_path = common_components_for_server_bundle.merge(server_component_to_path)
 
       server_component_imports = component_for_server_registration_to_path.map do |name, component_path|
         "import #{name} from '#{relative_path(generated_server_bundle_file_path, component_path)}';"
@@ -110,14 +110,16 @@ module ReactOnRails
     end
 
     def generated_server_bundle_file_path
-      generated_server_bundle_file_name = component_name defined_server_bundle_file_path.sub(".js", "-generated.js")
+      generated_server_bundle_file_path = defined_server_bundle_file_path.sub(".js", "-generated.js")
+      generated_server_bundle_file_name = component_name(generated_server_bundle_file_path)
+      source_entry_path = ReactOnRails::WebpackerUtils.webpacker_source_entry_path
 
       "#{source_entry_path}/#{generated_server_bundle_file_name}.js"
     end
 
     def clean_generated_packs_directory
-      FileUtils.rm_rf generated_packs_directory_path
-      FileUtils.mkdir_p generated_packs_directory_path
+      FileUtils.rm_rf(generated_packs_directory_path)
+      FileUtils.mkdir_p(generated_packs_directory_path)
     end
 
     def defined_server_bundle_file_path
@@ -125,31 +127,29 @@ module ReactOnRails
     end
 
     def generated_packs_directory_path
+      source_entry_path = ReactOnRails::WebpackerUtils.webpacker_source_entry_path
+
       "#{source_entry_path}/generated"
     end
 
-    def source_entry_path
-      ReactOnRails::WebpackerUtils.webpacker_source_entry_path
-    end
-
     def relative_component_path_from_generated_pack(ror_component_path)
-      component_file_pathname = Pathname.new ror_component_path
+      component_file_pathname = Pathname.new(ror_component_path)
       component_generated_pack_path = generated_pack_path(ror_component_path)
-      generated_pack_pathname = Pathname.new component_generated_pack_path
+      generated_pack_pathname = Pathname.new(component_generated_pack_path)
 
       relative_path(generated_pack_pathname, component_file_pathname)
     end
 
     def relative_path(from, to)
-      from_path = Pathname.new from
-      to_path = Pathname.new to
+      from_path = Pathname.new(from)
+      to_path = Pathname.new(to)
 
       relative_path = to_path.relative_path_from from_path
       relative_path.sub("../", "")
     end
 
     def generated_pack_path(file_path)
-      "#{generated_packs_directory_path}/#{component_name file_path}.jsx"
+      "#{generated_packs_directory_path}/#{component_name(file_path)}.jsx"
     end
 
     def component_name(file_path)
@@ -174,7 +174,7 @@ module ReactOnRails
       client_specific_components = component_name_to_path(client_render_components_paths)
 
       duplicate_components = common_component_to_path.slice(*client_specific_components.keys)
-      duplicate_components.each_key { |component| raise_client_component_overrides_common component }
+      duplicate_components.each_key { |component| raise_client_component_overrides_common(component) }
 
       client_specific_components
     end
@@ -184,10 +184,10 @@ module ReactOnRails
       server_specific_components = component_name_to_path(server_render_components_paths)
 
       duplicate_components = common_component_to_path.slice(*server_specific_components.keys)
-      duplicate_components.each_key { |component| raise_server_component_overrides_common component }
+      duplicate_components.each_key { |component| raise_server_component_overrides_common(component) }
 
       server_specific_components.each_key do |k|
-        raise_missing_client_component(k) unless client_component_to_path.key? k
+        raise_missing_client_component(k) unless client_component_to_path.key?(k)
       end
 
       server_specific_components
@@ -204,10 +204,14 @@ module ReactOnRails
     end
 
     def webpack_assets_status_checker
+      source_path = ReactOnRails::Utils.source_path
+      generated_assets_full_path = ReactOnRails::Utils.generated_assets_full_path
+      webpack_generated_files = ReactOnRails.configuration.webpack_generated_files
+
       @webpack_assets_status_checker ||= ReactOnRails::TestHelper::WebpackAssetsStatusChecker.new(
-        source_path: ReactOnRails::Utils.source_path,
-        generated_assets_full_path: ReactOnRails::Utils.generated_assets_full_path,
-        webpack_generated_files: ReactOnRails.configuration.webpack_generated_files
+        source_path: source_path,
+        generated_assets_full_path: generated_assets_full_path,
+        webpack_generated_files: webpack_generated_files
       )
     end
 
@@ -283,7 +287,7 @@ module ReactOnRails
     def prepend_to_file_if_not_present(file, text_to_prepend)
       file_content = File.read(file)
 
-      return if file_content.include? text_to_prepend
+      return if file_content.include?(text_to_prepend)
 
       content_with_prepended_text = text_to_prepend + file_content
       File.write(file, content_with_prepended_text)
