@@ -9,6 +9,9 @@ namespace :react_on_rails do
       The defined command is either a script or a module with a method `call`.
     DESC
     task webpack: :locale do
+      puts "====================================================="
+      puts "assets.rake: 13 wepback task running!"
+      puts "====================================================="
       build_production_command = ReactOnRails.configuration.build_production_command
       if build_production_command.present?
         if build_production_command.is_a?(String)

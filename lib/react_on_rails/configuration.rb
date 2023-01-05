@@ -156,11 +156,20 @@ module ReactOnRails
       }
 
       if Rake::Task.task_defined?("assets:precompile")
+        puts "====================================================="
+        puts "configuration.rb: 160 precompile defined"
+        puts "====================================================="
         Rake::Task["assets:precompile"].enhance do
+          puts "====================================================="
+          puts "configuration.rb: 164 ENHANCE DID RUN"
+          puts "====================================================="
           precompile_tasks.call
         end
       else
         Rake::Task.define_task("assets:precompile") do
+          puts "====================================================="
+          puts "configuration.rb: 171 precompile not defined"
+          puts "====================================================="
           precompile_tasks.call
         end
       end
