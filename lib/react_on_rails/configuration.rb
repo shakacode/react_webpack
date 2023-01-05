@@ -2,6 +2,9 @@
 
 module ReactOnRails
   def self.configure
+    puts "====================================================="
+    puts "configuration.rb: 6 self.configure"
+    puts "====================================================="
     yield(configuration)
     configuration.setup_config_values
   end
@@ -122,15 +125,25 @@ module ReactOnRails
     private
 
     def adjust_precompile_task
+      puts "====================================================="
+      puts "configuration.rb: 129 adjust_precompile_task"
+      puts "====================================================="
       skip_react_on_rails_precompile = %w[no false n f].include?(ENV["REACT_ON_RAILS_PRECOMPILE"])
 
       return if skip_react_on_rails_precompile || build_production_command.blank?
+
+      puts "====================================================="
+      puts "configuration.rb: 136 we didn't skip precompile"
+      puts "====================================================="
 
       # Ensure that shakacode/shakapacker does not call bin/webpacker if we're providing
       # the build command.
       ENV["WEBPACKER_PRECOMPILE"] = "false"
 
       precompile_tasks = lambda {
+        puts "====================================================="
+        puts "configuration.rb: 145 invokin precompile tasks"
+        puts "====================================================="
         Rake::Task["react_on_rails:generate_packs"].invoke
         Rake::Task["react_on_rails:assets:webpack"].invoke
         puts "Invoking task webpacker:clean from React on Rails"
