@@ -9,6 +9,13 @@ const configureClient = () => {
   // client config is going to try to load chunks.
   delete clientConfig.entry['server-bundle'];
 
+  // Override the runtimeChunk value to showcase the issue reported by
+  // https://github.com/shakacode/react_on_rails/issues/1558
+  clientConfig.optimization = {
+    ...clientConfig.optimization,
+    runtimeChunk: 'multiple',
+  };
+
   return clientConfig;
 };
 

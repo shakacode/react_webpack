@@ -1,0 +1,8 @@
+<%= render "layouts/wrapper" do %>
+  <h1>Server Rendered/Cached React/Redux Component</h1>
+  <%= react_component("ReduxApp", props: @app_props_server_render.merge(prerender: true), trace: true, prerender: true, id: "ReduxApp-react-component-0") %>
+  <hr/>
+
+  <h1>HelloWorld</h1>
+  <%= react_component("HelloWorld", props: @app_props_hello, prerender: true, trace: true, id: "HelloWorld-react-component-0") %>
+<% end %>
