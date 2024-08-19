@@ -305,7 +305,15 @@ ctx.ReactOnRails = {
 
 ctx.ReactOnRails.resetOptions();
 
-ClientStartup.clientStartup(ctx);
+// ClientStartup.clientStartup(ctx);
+
+if (typeof window !== 'undefined') {
+  // @ts-ignore
+  window.clientStartup = () => {
+    console.log('window.clientStartup');
+    ClientStartup.clientStartup(ctx);
+  };
+}
 
 export * from "./types";
 export default ctx.ReactOnRails;

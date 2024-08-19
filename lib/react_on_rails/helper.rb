@@ -422,6 +422,9 @@ module ReactOnRails
             #{rails_context_if_not_already_rendered}
             #{component_specification_tag}
             <#{content_tag_options_html_tag} id="#{render_options.dom_id}">#{chunk}</#{content_tag_options_html_tag}>
+            <script>
+              window.clientStartup?.();
+            </script>
           HTML
           next html_content.strip
         end

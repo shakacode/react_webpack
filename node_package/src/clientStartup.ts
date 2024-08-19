@@ -289,30 +289,32 @@ function isWindow(context: Context): context is Window {
 }
 
 function onPageReady(callback: () => void) {
-  if (document.readyState === "complete") {
-    callback();
-  } else {
-    document.addEventListener("readystatechange", function onReadyStateChange() {
-        onPageReady(callback);
-        document.removeEventListener("readystatechange", onReadyStateChange);
-    });
-  }
+  console.log('onPageReady1');
+  callback();
+  document.addEventListener("readystatechange", function onReadyStateChange() {
+    onPageReady(callback);
+    document.removeEventListener("readystatechange", onReadyStateChange);
+  });
 }
 
 export function clientStartup(context: Context): void {
+  console.log('clientStartup1');
   // Check if server rendering
   if (!isWindow(context)) {
     return;
   }
+  console.log('clientStartup2');
 
   // Tried with a file local variable, but the install handler gets called twice.
   // eslint-disable-next-line no-underscore-dangle
   if (context.__REACT_ON_RAILS_EVENT_HANDLERS_RAN_ONCE__) {
     return;
   }
+  console.log('clientStartup3');
 
   // eslint-disable-next-line no-underscore-dangle, no-param-reassign
   context.__REACT_ON_RAILS_EVENT_HANDLERS_RAN_ONCE__ = true;
 
+  console.log('clientStartup4');
   onPageReady(renderInit);
 }
