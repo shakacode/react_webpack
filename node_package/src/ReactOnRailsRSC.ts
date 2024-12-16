@@ -1,9 +1,10 @@
 import { renderToPipeableStream } from 'react-server-dom-webpack/server.node';
 import { PassThrough, Readable } from 'stream';
 import type { ReactElement } from 'react';
-
-import { RSCRenderParams } from './types';
-import ReactOnRails from './ReactOnRails';
+import context from './context';
+import { RSCRenderParams, RegisterableServerComponents } from './types';
+import ReactOnRails from './ReactOnRailsServer';
+import { isRegisterableServerComponentsOnClient } from './ReactOnRails';
 import buildConsoleReplay from './buildConsoleReplay';
 import handleError from './handleError';
 import {
@@ -39,6 +40,10 @@ const streamRenderRSCComponent = (reactElement: ReactElement, options: RSCRender
     isShellReady: true
   };
 
+  const ctx = context();
+  // if (ctx && ctx.debugConsole) {
+  //   ctx.debugConsole.log('\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n', 'streamRenderRSCComponent', options);
+  // }
   const { pipeToTransform, readableStream, emitError } = transformRenderStreamChunksToResultObject(renderState);
   try {
     const rscStream = renderToPipeableStream(
@@ -46,8 +51,10 @@ const streamRenderRSCComponent = (reactElement: ReactElement, options: RSCRender
       loadReactClientManifest(reactClientManifestFileName),
       {
         onError: (err) => {
+          // if (ctx && ctx.debugConsole) {
+          //   ctx.debugConsole.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nError in RSC stream", err);
+          // }
           const error = convertToError(err);
-          console.error("Error in RSC stream", error);
           if (throwJsErrors) {
             emitError(error);
           }
@@ -74,6 +81,18 @@ ReactOnRails.serverRenderRSCReactComponent = (options: RSCRenderParams) => {
   } finally {
     console.history = [];
   }
+};
+
+ReactOnRails.registerServerComponent = (components: RegisterableServerComponents): void => {
+  if (isRegisterableServerComponentsOnClient(components)) {
+    throw new Error('registerServerComponent expects an object where keys are component names and values are the components when used on the server');
+  }
+
+  // In the RSC bundle, registerServerComponent acts as a wrapper around the regular register method
+  // since server components are rendered exclusively on the RSC server. For non-RSC bundles (client
+  // and server), only the component names are needed to fetch the RSC payload from the RSC server.
+  // However, we include the component in the server bundle to make it include any client component it needs
+  ReactOnRails.register(components);
 };
 
 export * from './types';

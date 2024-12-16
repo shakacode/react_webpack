@@ -1,4 +1,5 @@
-import type { ReactElement } from 'react';
+import React, { type ReactElement } from 'react';
+import ReactDOMServer from 'react-dom/server';
 import type { Readable } from 'stream';
 
 import * as ClientStartup from './clientStartup';
@@ -20,6 +21,8 @@ import type {
   AuthenticityHeaders,
   Store,
   StoreGenerator,
+  RegisterableServerComponents,
+  RegisterableServerComponentsOnClient,
 } from './types';
 import reactHydrateOrRender from './reactHydrateOrRender';
 
@@ -28,6 +31,9 @@ const ctx = context();
 if (ctx === undefined) {
   throw new Error("The context (usually Window or NodeJS's Global) is undefined.");
 }
+
+ctx.React = React;
+ctx.ReactDOMServer = ReactDOMServer;
 
 if (ctx.ReactOnRails !== undefined) {
   throw new Error(`
@@ -43,6 +49,13 @@ const DEFAULT_OPTIONS = {
   traceTurbolinks: false,
   turbo: false,
 };
+
+export const isRegisterableServerComponentsOnClient = (
+  components: RegisterableServerComponents
+): components is RegisterableServerComponentsOnClient =>
+  typeof components === 'string' ||
+  (Array.isArray(components) && 
+  components.every((component) => typeof component === 'string'));
 
 ctx.ReactOnRails = {
   options: {},
@@ -61,8 +74,20 @@ ctx.ReactOnRails = {
    * When it's rendered, a call will be made to the server to render it.
    * @param componentNames
    */
-  registerServerComponent(...componentNames: string[]): void {
-    ComponentRegistry.registerServerComponent(...componentNames);
+  registerServerComponent(components: RegisterableServerComponents): void {
+    if (!isRegisterableServerComponentsOnClient(components)) {
+      throw new Error('registerServerComponent expects an array of component names when used on the client');
+    }
+
+    // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
+    const RSCClientRoot = require('./RSCClientRoot').default;
+
+    const componentsArray = Array.isArray(components) ? components : [components];
+    const componentsWrappedInRSCClientRoot = componentsArray.reduce(
+    (acc, name) => ({ ...acc, [name]: () => React.createElement(RSCClientRoot, { componentName: name }) }),
+    {}
+    );
+    this.register(componentsWrappedInRSCClientRoot);
   },
 
   registerStore(stores: { [id: string]: StoreGenerator }): void {

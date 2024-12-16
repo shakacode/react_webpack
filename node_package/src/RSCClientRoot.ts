@@ -10,7 +10,7 @@ if (!('use' in React)) {
 type Use = <T>(promise: Promise<T>) => T;
 const { use } = React as { use: Use };
 
-const renderCache: Record<string, Promise<unknown>> = {};
+const renderCache: Record<string, Promise<React.ReactElement>> = {};
 
 const createFromFetch = async (fetchPromise: Promise<Response>) => {
   const response = await fetchPromise;

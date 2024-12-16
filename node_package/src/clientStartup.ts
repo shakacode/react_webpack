@@ -23,6 +23,9 @@ declare global {
     REACT_ON_RAILS_PENDING_COMPONENT_DOM_IDS?: string[];
     REACT_ON_RAILS_PENDING_STORE_NAMES?: string[];
     REACT_ON_RAILS_UNMOUNTED_BEFORE?: boolean;
+    debugConsole?: { log: (...args: any[]) => void };
+    React: any;
+    ReactDOMServer: any;
   }
 
   namespace NodeJS {
@@ -31,6 +34,9 @@ declare global {
       roots: Root[];
       REACT_ON_RAILS_PENDING_COMPONENT_DOM_IDS?: string[];
       REACT_ON_RAILS_PENDING_STORE_NAMES?: string[];
+      debugConsole?: { log: (...args: any[]) => void };
+      React: any;
+      ReactDOMServer: any;
     }
   }
   namespace Turbolinks {

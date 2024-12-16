@@ -5,9 +5,11 @@
   "exports": {
     ".": {
       "rsc-server": "./node_package/lib/ReactOnRailsRSC.js",
+      "node": "./node_package/lib/ReactOnRailsServer.js",
       "default": "./node_package/lib/ReactOnRails.js"
     },
-    "./RSCClientRoot": "./node_package/lib/RSCClientRoot.js"
+    "./RSCClientRoot": "./node_package/lib/RSCClientRoot.js",
+    "./RSCServerRoot": "./node_package/lib/RSCServerRoot.js"
   },
   "directories": {
     "doc": "docs"
@@ -54,12 +56,14 @@
     "typescript": "^5.6.2"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "^7.12.5"
+    "@babel/runtime-corejs3": "^7.12.5",
+    "node-fetch": "^3.3.2"
   },
   "peerDependencies": {
     "js-yaml": ">= 3.0.0",
     "react": ">= 16",
     "react-dom": ">= 16",
+    "react-error-boundary": "^4.1.2",
     "react-server-dom-webpack": ">= 18.3.0-canary-670811593-20240322"
   },
   "files": [

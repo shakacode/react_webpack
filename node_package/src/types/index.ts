@@ -153,9 +153,14 @@ export interface Root {
 
 export type RenderReturnType = void | Element | Component | Root;
 
+export type RegisterableServerComponentsOnServer = { [key: string]: ReactComponent };
+export type RegisterableServerComponentsOnClient = string[] | string;
+export type RegisterableServerComponents = RegisterableServerComponentsOnServer | RegisterableServerComponentsOnClient;
+
 export interface ReactOnRails {
   register(components: { [id: string]: ReactComponentOrRenderFunction }): void;
-  registerServerComponent(...componentNames: string[]): void;
+  registerServerComponent(componentNames: RegisterableServerComponentsOnClient): void;
+  registerServerComponent(components: RegisterableServerComponentsOnServer): void;
   /** @deprecated Use registerStoreGenerators instead */
   registerStore(stores: { [id: string]: StoreGenerator }): void;
   registerStoreGenerators(storeGenerators: { [id: string]: StoreGenerator }): void;

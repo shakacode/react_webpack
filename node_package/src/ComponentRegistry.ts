@@ -1,4 +1,3 @@
-import React from 'react';
 import type { RegisteredComponent, ReactComponentOrRenderFunction, RenderFunction, ReactComponent } from './types/index';
 import isRenderFunction from './isRenderFunction';
 
@@ -59,17 +58,6 @@ export default {
       });
       registrationCallbacks.delete(name);
     });
-  },
-
-  registerServerComponent(...componentNames: string[]): void {
-    // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
-    const RSCClientRoot = require('./RSCClientRoot').default;
-
-    const componentsWrappedInRSCClientRoot = componentNames.reduce(
-      (acc, name) => ({ ...acc, [name]: () => React.createElement(RSCClientRoot, { componentName: name }) }),
-      {}
-    );
-    this.register(componentsWrappedInRSCClientRoot);
   },
 
   /**

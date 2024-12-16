@@ -116,14 +116,22 @@ module ReactOnRails
         "import #{name} from '#{relative_path(generated_server_bundle_file_path, component_path)}';"
       end
 
-      components_to_register = component_for_server_registration_to_path.keys
+      server_components_to_register = component_for_server_registration_to_path.keys.delete_if do |name|
+        next true unless ReactOnRails.configuration.auto_load_server_components
+
+        component_path = component_for_server_registration_to_path[name]
+        is_client_entrypoint?(component_path)
+      end
+      client_components_to_register = component_for_server_registration_to_path.keys - server_components_to_register
 
       <<~FILE_CONTENT
         import ReactOnRails from 'react-on-rails';
 
         #{server_component_imports.join("\n")}
 
-        ReactOnRails.register({#{components_to_register.join(",\n")}});
+        ReactOnRails.register({#{client_components_to_register.join(",\n")}});
+
+        ReactOnRails.registerServerComponent({#{server_components_to_register.join(",\n")}});
       FILE_CONTENT
     end
 
